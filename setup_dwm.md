@@ -25,7 +25,7 @@ patch
 ```
 
 STterm
-````
+```
 git clone https://git.suckless.org/stterm
 
 patch
