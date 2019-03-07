@@ -1,6 +1,12 @@
+### Packages
+
 apt install xorg tmux mc libx11-dev libxft-dev libxinerama-dev firefox git ntp vim gstreamer1.0-libav libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev libasound2-dev upower
 pkg-config libncursesw5-dev libreadline6-dev
 
+### Sources
+
+DWM
+```
 git clone https://git.suckless.org/dwm
 
 patch
@@ -16,7 +22,10 @@ patch
 > static const char *firefox[]  = { "firefox", NULL };
 65a67
 >       { MODKEY|ShiftMask,             XK_f,      spawn,          {.v = firefox } },
+```
 
+STterm
+````
 git clone https://git.suckless.org/stterm
 
 patch
@@ -24,13 +33,22 @@ patch
 < static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
 ---
 > static char *font = "Liberation Mono:pixelsize=14:antialias=true:autohint=true";
+```
 
+Surf
+```
 git clone https://git.suckless.org/surf
 
 patch
+```
 
+DMenu
+```
 git clone https://git.suckless.org/dmenu
+```
 
+SLStatus
+```
 git clone https://git.suckless.org/slstatus
 
 patch
@@ -42,9 +60,12 @@ patch
 >       { battery_perc, "%s%% ",        "battery" },
 >       { keymap, "%s ",                ""      },
 >       { datetime, "%s",               "%F %T" },
+```
 
-
+NNN
+```
 wget https://github.com/jarun/nnn/archive/v2.3.tar.gz
 tar xvf v2.3.tar.gz
 make
 sudo make install
+```
