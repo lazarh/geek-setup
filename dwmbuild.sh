@@ -2,7 +2,38 @@
 
 cd ~
 
-sudo apt install git xorg libx11-dev libxft-dev libxinerama-dev vim libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev libasound2-dev -y
+sudo apt install git xorg libx11-dev libxft-dev libxinerama-dev vim libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev libasound2-dev feh fzy sxiv libgcr-3-dev x11-utils mpd ncmpcpp -y
+
+temp_startdwm=/tmp/startdwm
+startdwm=/usr/local/bin/startdwm
+
+if [ -e $startdwm ]; then
+	echo "File $startdwm already exists!"
+else
+	cat > $temp_startdwm <<EOF
+#!/bin/sh
+
+while true; do
+    # Log stderror to a file
+    dwm 2> ~/.dwm.log
+    # No error logging
+    #dwm >/dev/null 2>&1
+done
+EOF
+	sudo mv $temp_startdwm $startdwm
+fi
+
+sudo chmod +x $startdwm
+
+xinitrc=~/.xinitrc2
+
+if [ -e $xinitrc ]; then
+	echo "File $xinitrc already exists!"
+else
+	cat > $xinitrc <<EOF
+exec startdwm & slstatus
+EOF
+fi
 
 mkdir ~/Documents/
 cd ~/Documents/
