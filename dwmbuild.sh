@@ -2,7 +2,25 @@
 
 cd ~
 
-sudo apt install git xorg libx11-dev libxft-dev libxinerama-dev vim libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev libasound2-dev feh fzy sxiv libgcr-3-dev x11-utils mpd ncmpcpp -y -qq
+temp_sourceslist=/tmp/sources.list
+sourceslist=/etc/apt/sources.list
+sourceslistorig=/etc/apt/sources.list.orig
+cat > $temp_sourceslist <<EOF
+deb http://deb.debian.org/debian/ testing main contrib non-free
+#deb-src http://deb.debian.org/debian/ testing main contrib non-free
+
+deb http://deb.debian.org/debian/ testing-updates main contrib non-free
+#deb-src http://deb.debian.org/debian/ testing main contrib non-free
+EOF
+
+sudo mv $sourceslist $sourceslistorig
+sudo cp $temp_sourceslist $sourceslist
+
+sudo apt update
+supo apt upgrade -y
+sudo apt --fix-broken install -y
+sudo apt install vim git xorg xserver-xorg x11-xserver-utils libx11-dev libxft-dev libxinerama-dev libwebkit2gtk-4.0-37 libwebkitgtk2-4.0-dev libasound2-dev feh sxiv libgcr-3-dev x11-utils mpd ncmpcpp libjavascriptcoregtk-4.0-18-dev libxss1 suckless-tools -y 
+supo apt upgrade -y
 
 temp_startdwm=/tmp/startdwm
 startdwm=/usr/local/bin/startdwm
@@ -25,7 +43,7 @@ fi
 
 sudo chmod +x $startdwm
 
-xinitrc=~/.xinitrc2
+xinitrc=~/.xinitrc
 
 if [ -e $xinitrc ]; then
 	echo "File $xinitrc already exists!"
@@ -55,15 +73,17 @@ cd ~/Documents/
 
 git clone https://github.com/lazarh/geek-setup.git
 git clone https://git.suckless.org/dwm
+#git clone --single-branch --branch 6.1 https://git.suckless.org/dwm
 git clone https://git.suckless.org/slstatus
 git clone https://git.suckless.org/st
 git clone https://git.suckless.org/surf
 git clone https://git.suckless.org/dmenu
+#git clone --single-branch --branch 4.8 https://git.suckless.org/dmenu
 
-cp -rf ~/Documents/geek-setup/*dwm*.diff ~/Documents/dwm/.
-cp -rf ~/Documents/geek-setup/*slstatus*.diff ~/Documents/slstatus/.
-cp -rf ~/Documents/geek-setup/*st*.diff ~/Documents/st/.
-cp -rf ~/Documents/geek-setup/*surf*.diff ~/Documents/surf/.
+cp -rf ~/Documents/geek-setup/dwm*lazarh*.diff ~/Documents/dwm/.
+cp -rf ~/Documents/geek-setup/slstatus*lazarh*.diff ~/Documents/slstatus/.
+cp -rf ~/Documents/geek-setup/st*lazarh*.diff ~/Documents/st/.
+cp -rf ~/Documents/geek-setup/surf*lazarh*.diff ~/Documents/surf/.
 
 cd ~/Documents/dwm/ 
 git apply *lazarh*.diff 
@@ -73,10 +93,13 @@ cd ~/Documents/slstatus
 git apply *lazarh*.diff
 sudo make clean install > /tmp/slstatus_build.log 
 
-cd ~/Documents/st
-git apply *lazarh*.diff
-sudo make clean install > /tmp/st_build.log 
+#cd ~/Documents/st
+#git apply *lazarh*.diff
+#sudo make clean install > /tmp/st_build.log 
 
 cd ~/Documents/surf
 git apply *lazarh*.diff
 sudo make clean install > /tmp/surf_build.log 
+
+cd ~
+startx
