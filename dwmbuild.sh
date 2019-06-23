@@ -2,7 +2,7 @@
 
 cd ~
 
-sudo apt install git xorg libx11-dev libxft-dev libxinerama-dev vim libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev libasound2-dev feh fzy sxiv libgcr-3-dev x11-utils mpd ncmpcpp -y
+sudo apt install git xorg libx11-dev libxft-dev libxinerama-dev vim libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev libasound2-dev feh fzy sxiv libgcr-3-dev x11-utils mpd ncmpcpp -y -qq
 
 temp_startdwm=/tmp/startdwm
 startdwm=/usr/local/bin/startdwm
@@ -35,7 +35,22 @@ exec startdwm & slstatus
 EOF
 fi
 
-mkdir ~/Documents/
+temp_wallpaper=/tmp/randowwallpaper
+randomwallpaper=/usr/local/bin/randomwallpaper
+
+if [ -e $randomwallpaper ]; then
+	echo "File $randomwallpaper already exists!"
+else
+	cat > $temp_wallpaper <<EOF
+#!/bin/sh
+feh --randomize --bg-fill /home/def/Documents/wallpapers/Landscapes/*
+EOF
+	sudo mv $temp_wallpaper $randomwallpaper
+fi
+
+sudo chmod +x $randomwallpaper
+
+mkdir ~/Documents/ -p
 cd ~/Documents/
 
 git clone https://github.com/lazarh/geek-setup.git
@@ -45,25 +60,23 @@ git clone https://git.suckless.org/st
 git clone https://git.suckless.org/surf
 git clone https://git.suckless.org/dmenu
 
-cp ~/Documents/geek-setup/*dwm*.diff ~/Documents/dwm/.
-cp ~/Documents/geek-setup/*slstatus*.diff ~/Documents/slstatus/.
-cp ~/Documents/geek-setup/*st*.diff ~/Documents/st/.
-cp ~/Documents/geek-setup/*surf*.diff ~/Documents/surf/.
+cp -rf ~/Documents/geek-setup/*dwm*.diff ~/Documents/dwm/.
+cp -rf ~/Documents/geek-setup/*slstatus*.diff ~/Documents/slstatus/.
+cp -rf ~/Documents/geek-setup/*st*.diff ~/Documents/st/.
+cp -rf ~/Documents/geek-setup/*surf*.diff ~/Documents/surf/.
 
 cd ~/Documents/dwm/ 
 git apply *lazarh*.diff 
-sudo make clean install
+sudo make clean install > /tmp/dwm_build.log 
 
 cd ~/Documents/slstatus
 git apply *lazarh*.diff
-sudo make clean install
+sudo make clean install > /tmp/slstatus_build.log 
 
 cd ~/Documents/st
 git apply *lazarh*.diff
-sudo make clean install
+sudo make clean install > /tmp/st_build.log 
 
 cd ~/Documents/surf
 git apply *lazarh*.diff
-sudo make clean install
-
-
+sudo make clean install > /tmp/surf_build.log 
